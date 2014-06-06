@@ -1,4 +1,4 @@
-vertx
+Conversation Module
 =====
 
 This module allows to send the messages to the useres and store the same messages in a database. 
