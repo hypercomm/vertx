@@ -7,6 +7,7 @@ import org.vertx.java.core.json.JsonObject;
 import org.vertx.java.core.sockjs.SockJSServer;
 import org.vertx.java.platform.Verticle;
 import org.vertx.java.core.eventbus.EventBus;
+import java.net.*;
 
   public class server extends Verticle {
       public void start() {
@@ -15,7 +16,7 @@ import org.vertx.java.core.eventbus.EventBus;
                         JsonArray arrayoutbound = new JsonArray("[{}]");
 			  //configuracao da variavel para modulo webserver
                         JsonObject configWebServer = new JsonObject();
-                        configWebServer.putString("host", "193.136.93.199");
+                        configWebServer.putString("host", "Inet4Address.getLocalHost().getHostAddress()");
                         //configWebServer.putString("host", "192.168.1.14");
                         configWebServer.putNumber("port", 4443);
                         configWebServer.putArray("inbound_permitted", arrayinbound);
