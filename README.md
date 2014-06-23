@@ -8,7 +8,7 @@ Create a ->VERTX_MODS<- environment variable in your system, that should corresp
 The Vertx Conversation Manager module enables [vert.x](http://vertx.io/) to be used as Messaging Server of [WONDER WebRTC Framework](http://hypercomm.github.io/wonder/).
 
 
-Just copy ["com.ptin.conversationmanager-v1.0"](https://github.com/hypercomm/vertx/tree/master/VERTX_MODS/com.ptin.conversationmanager-v1.0) to VERTX_MODS directory that was mentioned before. 
+Just copy the folder ["com.ptin~conversationmanager~1.0.0-SNAPSHOT"](https://github.com/hypercomm/vertx/tree/master/build/mods) to VERTX_MODS directory that was mentioned before. 
 
 
 To have a vert.x server running in your pc just copy the ["server.java"](https://github.com/hypercomm/vertx/tree/master/server.java) file to your computer in a folder of your choice. Then run "vertx run server.java".
