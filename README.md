@@ -1,7 +1,7 @@
 Conversation Module
 =====
 
-To use this module you need to install the Vert.x(v1.3.1-final) service in your computer or server, ["here"](http://vertx.io/install.html).
+To use this module you need to install the Vert.x service in your computer or server, ["here"](http://vertx.io/install.html).
 
 Create a ->VERTX_MODS<- environment variable in your system, that should corresponde to the directory where you have all of your modules of vertx including this one ["see here"](http://vertx.io/mods_manual.html#system).
 
