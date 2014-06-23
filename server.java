@@ -16,7 +16,7 @@ import java.net.*;
                         JsonArray arrayoutbound = new JsonArray("[{}]");
 			  //configuracao da variavel para modulo webserver
                         JsonObject configWebServer = new JsonObject();
-                        configWebServer.putString("host", "Inet4Address.getLocalHost().getHostAddress()");
+                        configWebServer.putString("host", Inet4Address.getLocalHost().getHostAddress());
                         //configWebServer.putString("host", "192.168.1.14");
                         configWebServer.putNumber("port", 4443);
                         configWebServer.putArray("inbound_permitted", arrayinbound);
