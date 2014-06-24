@@ -1,4 +1,4 @@
-Conversation Module
+WONDER Messaging Server Conversation Module
 =====
 
 The Vertx Conversation Manager module enables [vert.x](http://vertx.io/) to be used as Messaging Server of [WONDER WebRTC Framework](http://hypercomm.github.io/wonder/).
