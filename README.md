@@ -1,14 +1,13 @@
 Conversation Module
 =====
 
-To use this module you need to install the Vert.x service in your computer or server, ["here"](http://vertx.io/install.html).
-
-Create a ->VERTX_MODS<- environment variable in your system, that should corresponde to the directory where you have all of your modules of vertx including this one ["see here"](http://vertx.io/mods_manual.html#system).
-
 The Vertx Conversation Manager module enables [vert.x](http://vertx.io/) to be used as Messaging Server of [WONDER WebRTC Framework](http://hypercomm.github.io/wonder/).
 
+Just follow these steps to have it running:
 
-Just copy the folder ["com.ptin~conversationmanager~1.0.0-SNAPSHOT"](https://github.com/hypercomm/vertx/tree/master/build/mods) to VERTX_MODS directory that was mentioned before. 
-
-
-To have a vert.x server running in your pc just copy the ["server.java"](https://github.com/hypercomm/vertx/tree/master/server.java) file to your computer in a folder of your choice. Then run "vertx run server.java".
+1. Install [vert.x](http://vertx.io/install.html).
+2. Add vertx bin folder to your classpath environment variable
+3. Create VERTX_MODS environment variable in your system, that should point to the directory where you have all vertx modules. [see here](http://vertx.io/mods_manual.html#system);
+4. Copy the folder [com.ptin~conversationmanager~1.0.0-SNAPSHOT](https://github.com/hypercomm/vertx/tree/master/build/mods) to VERTX_MODS directory created in the previous step. 
+5. Copy the [server.java](https://github.com/hypercomm/vertx/tree/master/server.java) file to your computer in a folder of your choice.
+6. Then execute ``vertx run server.java``.
