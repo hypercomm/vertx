@@ -35,7 +35,6 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 	protected String host;
 	protected int port;
 	public ConversationManager that;
-	//private JavaSender defaultJavaSender = new SenderClient("http://150.140.184.246:4441/unifiedpush-server-0.10.1/");
 	
 	public void start() {
 		System.out.println("Conversation Module started");
@@ -87,10 +86,7 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 	
 	private void sendNotification(Message<JsonObject> message) { 
 		
-		//JsonArray to = message.body().getArray("to");//getMandatoryString("to", message);
 		JsonObject body = message.body().getObject("body");
-		
-		//System.out.println("SENDNOTIFICATION MESSAGE: " + body().toString());
 		
 		String from = body.getString("from");
 		JsonArray to = body.getArray("to");
@@ -115,19 +111,7 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
         .build();
 		
 		defaultJavaSender.send(unifiedMessage, callback);
-		/*
-		JavaSender defaultJavaSender2 = new SenderClient("http://150.140.184.246:4441/unifiedpush-server-0.10.1/");
 		
-		UnifiedMessage unifiedMessage2 = new UnifiedMessage.Builder()
-        .pushApplicationId("adc9e93d-c8de-4c8c-b08f-8cf0692e7833")
-        .masterSecret("c94cdf14-abb2-4831-af3f-c5696a77c1c1")
-        .aliases(convertArray(to)) //to field
-        .alert("{\"to\": \""+convertArray(to).toString()+"\", \"from\":\""+ from +"\", \"contextId\":\"" + contexId + "\"}")
-        //.sound("default")
-        .build();
-		
-		
-		defaultJavaSender2.send(unifiedMessage2, callback);*/
 				
 	}
 	
@@ -155,16 +139,8 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
     	forwardMessage(msg);
 		
 		if(message.body().getObject("body").getString("type").toString().equals("invitation")){
-			//System.out.println("Entrei INVITATION");
-			//onInviteMessage(message);
-			//sendNotification(message);
-			//forwardMessage(msg);
-			if(message.body().getObject("body").getString("from").equals(message.body().getObject("body").getObject("body").getString("hosting"))){
-				System.out.println("FROM: "+ message.body().getObject("body").getString("from"));
-				System.out.println("FROM: "+ message.body().getObject("body").getObject("body").getString("hosting"));
-				sendNotification(msg);
-			}
-				
+			sendNotification(msg);
+			
 			System.out.println("OBJECT: " + message.body().toString());
 			Handler<Message<JsonObject>> publishHandler = new Handler<Message<JsonObject>>() {
 			    public void handle(Message<JsonObject> message) {
@@ -175,14 +151,6 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 			eb.registerHandler(message.body().getObject("body").getString("contextId"), publishHandler);
 			
 		}
-		/*else if(message.body().getObject("body()").getString("type").toString().equals("accepted")){
-			//System.out.println("ACCEPT: "+ message.body().getObject("body()").toString());
-		}
-		else{
-			//System.out.println("Entrei NOTINVITATION");
-			///forwardMessage(msg);
-			//saveMessage(message);
-		}*/
 		
 		JsonObject data = new JsonObject();
 		data.putString("action", "save");
@@ -277,91 +245,5 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
   public void stop() {
   }
   
-  /** OTHER FUNCTIONS
-   * 
-   * private void onInviteMessage(Message<JsonObject> message) {
-		//Registar o utilizador com as especificacoes mandadas
-		//necessario pegar nos servicos que sao subscritos para depois retornar a biblioteca a ser usada e assim
-		
-		final Message<JsonObject> msg = message;
-		//System.out.println("MESSAGE: "+ message.body().getObject("body()").getString("contextId"));
-		String contextId = message.body().getObject("body()").getString("contextId");
-		
-		//System.out.println("CONTEXTID: " + 	contextId);
-		
-		JsonObject doAction = new JsonObject();
-		doAction.putString("action", "status");
-		doAction.putString("report", "matches");
-		
-		JsonObject matches = new JsonObject();
-		matches.putString("contextId",   contextId);
-		doAction.putObject("data", matches);
-		
-		eb.send("test.session_manager", 
-				doAction,
-				new Handler<Message<JsonObject>>() {
-					public void handle(Message<JsonObject> message) {
-						
-						//System.out.println("Vou enviar");
-						//System.out.println(message.body().toString());
-						
-						//JsonObject resposta = new JsonObject();
-						if(message.body().getBoolean("matches")){
-							//System.out.println("TRUE: " + message.body().toString());
-							//saveMessage(msg);
-							//forwardMessage(msg);
-							//System.out.println("TRUE");
-						}
-						if(!message.body().getBoolean("matches"))
-							createSession(msg);
-							//forwardMessage(msg);	
-							//System.out.println("FALSE");
-						}
-						
-					});	
-	}
-   * 
-   * 
-   * 
-	private void createSession(Message<JsonObject> message) {
-		//System.out.println("CreateSession");
-		//registHandler to receive the publishes of each conversation
-		
-		final String contextId = message.body().getObject("body()").getString("contextId");
-		final Message<JsonObject> msg = message;
-		
-		
-		JsonObject createSession = new JsonObject();
-		createSession.putString("action", "start");
-		
-		eb.send("test.session_manager", 
-				createSession,
-				new Handler<Message<JsonObject>>() {
-					public void handle(Message<JsonObject> message) {
-						System.out.println("CreatedSession " + message.body().toString());
-						
-						if(message.body().getString("status").equals("ok")){
-							System.out.println("CreateSession " + message.body().toString());
-							JsonObject putData = new JsonObject();
-							putData.putString("action", "put");
-							putData.putString("sessionId", message.body().getString("sessionId"));
-							
-							JsonObject messageData = new JsonObject();
-							messageData.putString("contextId", contextId);
-							messageData.putString("message", msg.body().getObject("body()").toString());
-							putData.putObject("data", messageData);
-							
-							eb.send("test.session_manager", 
-									putData,
-									new Handler<Message<JsonObject>>() {
-										public void handle(Message<JsonObject> message) {
-											
-										}	
-									});
-						}
-						
-					}
-				});	
-	}
-   */
 }
+
