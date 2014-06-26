@@ -51,7 +51,9 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 	public void handle(Message<JsonObject> message) {
 		//System.out.println("MESSAGE: " + message.body().toString());
 		String action = message.body().getString("action");
-		if (action == null) {
+		String type = message.body().getString("type");
+		
+		if (action == null && type == null ) {
 			sendError(message, "action must be specified");
 			return;
 		}
@@ -64,10 +66,10 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 				sendNotification(message);
 				break;
 			case "connected":
-				retrieveMessages(message, action);
+				retrieveMessages(message);
 				break;
-			case "addedParticipant":
-				retrieveMessages(message, action);
+			case "accepted":
+				retrieveMessages(message);
 				break;
 			default:
 				sendError(message, "Invalid action: " + action);
@@ -144,7 +146,12 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 			System.out.println("OBJECT: " + message.body().toString());
 			Handler<Message<JsonObject>> publishHandler = new Handler<Message<JsonObject>>() {
 			    public void handle(Message<JsonObject> message) {
-			        System.out.println("I received a message " + message.body().toString());
+			        	System.out.println("I received a message " + message.body().toString());
+			        	
+			        	if(message.body().getString("from") != null)
+			        		System.out.println("  Message from FROM: "+  message.body().getString("from"));
+			        	
+			        	retrieveMessages(message);
 			    }
 			};
 			
@@ -210,20 +217,19 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 				});
 	}
 	
-	private void retrieveMessages(Message<JsonObject> message, String action){
+	private void retrieveMessages(Message<JsonObject> message){
 		
 		System.out.println("  Message from contextId: "+  message.body().toString());
+		
 		
 		final Message<JsonObject> mensagem = message;
 		
 		JsonObject getData = new JsonObject();
 		getData.putString("action", "find");
 		getData.putString("collection", "messages");
-		JsonArray rtcIdentities = new JsonArray();
-		rtcIdentities.add(message.body().getString("to"));
+
 		
 		JsonObject match = new JsonObject();
-		//match.putArray("to", rtcIdentities);
 		match.putString("contextId", message.body().getString("contextId"));
 	
 		
@@ -231,6 +237,14 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
 		
 		eb.send("test.my_persistor", getData, new Handler<Message<JsonObject>>() {
 			public void handle(Message<JsonObject> message) {
+				if(mensagem.body().getString("from") != null){
+					System.out.println("  Message from FROM: "+  mensagem.body().getString("from"));
+					JsonObject resposta2 = new JsonObject();
+					resposta2.putString("status","ok");
+					resposta2.putArray("message", message.body().getArray("results"));
+					
+					eb.send(mensagem.body().getString("from"), resposta2);
+				}
 				//System.out.println("Message: " +  message.body().toString());
 				JsonObject resposta2 = new JsonObject();
 				resposta2.putString("status","ok");
@@ -246,4 +260,3 @@ public class ConversationManager extends BusModBase implements Handler<Message<J
   }
   
 }
-
